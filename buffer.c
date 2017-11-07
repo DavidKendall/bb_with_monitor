@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <pthread.h>
 #include <stdio.h>
 #include "buffer.h"
@@ -8,50 +7,50 @@ static pthread_cond_t fullSlot;
 static pthread_cond_t freeSlot;
 
 static message_t buffer[BUF_SIZE];
-static uint8_t front = 0;
-static uint8_t back = 0;
-static uint8_t nFull = 0;
+static unsigned int front = 0;
+static unsigned int back = 0;
+static unsigned int nFull = 0;
 
-void putBuffer(message_t const * const msg) {
+void put_buffer(message_t const * const msg) {
   buffer[back] = *msg;
   back = (back + 1) % BUF_SIZE;
 }
 
-void getBuffer(message_t * const msg) {
+void get_buffer(message_t * const msg) {
   *msg = buffer[front];
   front = (front + 1) % BUF_SIZE;
 }
 
-void safeBufferInit(void) {
+void safe_buffer_init(void) {
   pthread_mutex_init(&bufMutex, NULL);
   pthread_cond_init(&fullSlot, NULL);
   pthread_cond_init(&freeSlot, NULL);
 }
 
-void safeBufferPut(message_t const * const msg) {
+void safe_buffer_put(message_t const * const msg) {
   pthread_mutex_lock(&bufMutex);
   while (nFull == BUF_SIZE) {
     pthread_cond_wait(&freeSlot, &bufMutex);
   }
-  putBuffer(msg);
+  put_buffer(msg);
   nFull += 1;
   pthread_cond_signal(&fullSlot);
   pthread_mutex_unlock(&bufMutex);
 }
 
 
-void safeBufferGet(message_t * const msg) {
+void safe_buffer_get(message_t * const msg) {
   pthread_mutex_lock(&bufMutex);
   while (nFull == 0) {
     pthread_cond_wait(&fullSlot, &bufMutex);
   }
-  getBuffer(msg);
+  get_buffer(msg);
   nFull -= 1;
   pthread_cond_signal(&freeSlot);
   pthread_mutex_unlock(&bufMutex);
 }
 
-void safeBufferPrint(void) {
+void safe_buffer_print(void) {
   int i;
   pthread_mutex_lock(&bufMutex);
   for (i=0; i < nFull; i+=1) {

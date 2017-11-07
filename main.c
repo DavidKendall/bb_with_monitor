@@ -30,7 +30,7 @@ static void randomDelay(void);
 static pthread_t thread[N_PRODUCERS + N_CONSUMERS];
 
 int main(int argc, char *argv[]) {
-  safeBufferInit();
+  safe_buffer_init();
   beginThreads();
   endThreads();
   printf("\nFINISHED\n");
@@ -49,8 +49,8 @@ static void *producer(void *arg) {
   for (int n = 0; n < N_ITERATIONS; n+=1) {
     randomDelay();
     msg.data[0] = rand() % 100;
-    safeBufferPut(&msg);
-    safeBufferPrint();
+    safe_buffer_put(&msg);
+    safe_buffer_print();
   }
   pthread_exit(NULL);        
 }
@@ -65,8 +65,8 @@ static void *consumer(void *arg) {
 
   for (int n = 0; n < N_ITERATIONS; n+=1) {
     randomDelay();
-    safeBufferGet(&msg);
-    safeBufferPrint();
+    safe_buffer_get(&msg);
+    safe_buffer_print();
   }
   pthread_exit(NULL);        
 }
