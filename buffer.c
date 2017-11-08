@@ -53,10 +53,11 @@ void safe_buffer_get(message_t * const msg) {
 void safe_buffer_print(void) {
   int i;
   pthread_mutex_lock(&bufMutex);
+  printf("|");
   for (i=0; i < nFull; i+=1) {
     printf("|%02ld, %03d|", buffer[(front + i) % BUF_SIZE].id, buffer[(front+i) % BUF_SIZE].data[0]);
   }
-  printf("\n");
+  printf("|\n");
   pthread_mutex_unlock(&bufMutex);
 }
 
