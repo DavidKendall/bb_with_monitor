@@ -1,7 +1,8 @@
 # Operating systems and concurrency example
 
 This repository is provided to support a lecture in operating systems and concurrency. 
-See the [slides](http://hesabu.net/en0572/assets/ra/B08.pdf) for more details.
+See the [slides](http://hesabu.net/kf5010/assets/ra/B08.pdf) for more details. It is also used
+in the [lab session](http://hesabu.net/kf5010/L09.html).
 
 Clone the repository and run the Makefile to build the program, then run it and observe the behaviour, e.g.
 
